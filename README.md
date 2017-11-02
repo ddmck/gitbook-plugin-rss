@@ -26,7 +26,6 @@ Add it to your `book.json` with a basic configuration:
     "rss": {
       "title": "My amazing book",
       "description": "This is the best book ever.",
-      "author": "Denys Dovhan",
       "site_url": "http://book.org/",
       "managingEditor": "writer@book.org (Denys Dovhan)",
       "webMaster": "webmaster@book.org (Denys Dovhan)",
