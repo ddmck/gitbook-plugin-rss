@@ -34,14 +34,14 @@ module.exports = {
 
       const pageTitle = title(page.content);
       const pageDescription = desc(page.content);
-      const pageModifiedDate = stats(page.path).mtime;
+      const pageModifiedDate = stats(page.rawPath);
 
       feed.item({
         title: pageTitle ? pageTitle.text : '',
         description: pageDescription ? pageDescription.text : '',
         url: url,
-        author: site.author,
-        pubDate: pageModifiedDate,
+        guid: url + "#" + pageModifiedDate.mtime.valueOf(),
+        date: pageModifiedDate.mtime.toUTCString(),
       });
 
       return page;
