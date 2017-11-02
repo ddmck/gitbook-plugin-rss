@@ -4,6 +4,7 @@ const title = require('get-md-title');
 const desc  = require('get-md-desc');
 const RSS   = require('rss');
 const write = require('fs').writeFileSync;
+const stats = require('fs').statSync;
 const path = require('path');
 const parse = require('url').parse;
 
@@ -33,12 +34,14 @@ module.exports = {
 
       const pageTitle = title(page.content);
       const pageDescription = desc(page.content);
+      const pageModifiedDate = stats(page.rawPath);
 
       feed.item({
         title: pageTitle ? pageTitle.text : '',
         description: pageDescription ? pageDescription.text : '',
         url: url,
-        author: site.author,
+        guid: url + "#" + pageModifiedDate.mtime.valueOf(),
+        date: pageModifiedDate.mtime.toUTCString(),
       });
 
       return page;
