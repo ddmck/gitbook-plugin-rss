@@ -7,9 +7,18 @@ const write = require('fs').writeFileSync;
 const stats = require('fs').statSync;
 const path = require('path');
 const parse = require('url').parse;
+const shell = require('shelljs');
+
 
 // Define variables
 let site, feed;
+
+if (!shell.which('git')) {
+  shell.echo('Sorry, this script requires git');
+  shell.exit(1);
+} else {
+  shell.echo('We got git!')
+}
 
 module.exports = {
   website: {
@@ -34,14 +43,14 @@ module.exports = {
 
       const pageTitle = title(page.content);
       const pageDescription = desc(page.content);
-      const pageModifiedDate = stats(page.rawPath);
-
+      // const pageModifiedDate = stats(page.rawPath);
+      const pageModifiedDate = new Date(shell.exec("git log -n 1 --format=%cd " + page.rawPath).stdout.trim())
       feed.item({
         title: pageTitle ? pageTitle.text : '',
         description: pageDescription ? pageDescription.text : '',
         url: url,
-        guid: url + "#" + pageModifiedDate.mtime.valueOf(),
-        date: pageModifiedDate.mtime.toUTCString(),
+        guid: url + "#" + pageModifiedDate.valueOf(),
+        date: pageModifiedDate.toUTCString(),
       });
 
       return page;
